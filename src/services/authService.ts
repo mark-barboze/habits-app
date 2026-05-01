@@ -14,7 +14,8 @@ import {
 } from 'firebase/firestore';
 
 // ✅ ALWAYS use centralized Firebase instance
-import { auth, db, googleProvider, signInWithPopup } from '../lib/firebase';
+import { auth, db, googleProvider } from '../lib/firebase';
+import { signInWithPopup } from 'firebase/auth';
 
 import { UserProfile, OperationType } from '../types';
 import { handleFirestoreError } from './errorService';
