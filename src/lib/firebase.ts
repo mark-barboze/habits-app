@@ -19,7 +19,12 @@ const firebaseConfig = {
 console.log("🔥 API KEY CHECK:", firebaseConfig.apiKey);
 console.log("🔥 FULL CONFIG:", JSON.stringify(firebaseConfig));
 
-const app = initializeApp(firebaseConfig);
+import { initializeApp, getApps, getApp } from 'firebase/app';
+
+const app = getApps().length === 0
+  ? initializeApp(firebaseConfig)
+  : getApp();
+
 console.log("Firebase Project ID:", firebaseConfig.projectId);
 export const db = getFirestore(app);
 
