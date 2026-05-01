@@ -1,0 +1,161 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile and metadata",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "isAdmin": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "lastActive": { "type": "string", "format": "date-time" },
+        "isActive": { "type": "boolean" }
+      },
+      "required": ["uid", "email", "createdAt", "isActive"]
+    },
+    "Habit": {
+      "title": "Habit",
+      "description": "Habit definition for a user",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "frequency": { "type": "string", "enum": ["daily", "weekly"] },
+        "category": { "type": "string" },
+        "streakCurrent": { "type": "number" },
+        "streakLongest": { "type": "number" },
+        "lastCompletionDate": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "isActive": { "type": "boolean" }
+      },
+      "required": ["userId", "name", "frequency", "createdAt", "isActive"]
+    },
+    "Todo": {
+      "title": "Todo",
+      "description": "A daily to-do item",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "text": { "type": "string" },
+        "completed": { "type": "boolean" },
+        "color": { "type": "string", "enum": ["black", "green", "red"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "text", "completed", "color", "createdAt"]
+    },
+    "Completion": {
+      "title": "Completion",
+      "description": "Daily completion record for a habit",
+      "type": "object",
+      "properties": {
+        "habitId": { "type": "string" },
+        "userId": { "type": "string" },
+        "date": { "type": "string", "description": "YYYY-MM-DD format" },
+        "completedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["habitId", "userId", "date", "completedAt"]
+    },
+    "Admin": {
+      "title": "Admin",
+      "description": "Admin UID list",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" }
+      },
+      "required": ["userId"]
+    },
+    "DailyQuote": {
+      "title": "Daily Quote",
+      "description": "Selected quote for a user for a specific day",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "date": { "type": "string" },
+        "text": { "type": "string" },
+        "category": { "type": "string" },
+        "author": { "type": "string" },
+        "completionsToday": { "type": "number" }
+      },
+      "required": ["userId", "date", "text", "category"]
+    },
+    "WeeklyReport": {
+      "title": "Weekly Report",
+      "description": "AI-generated weekly summary of productivity",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "dateRange": {
+          "type": "object",
+          "properties": {
+            "start": { "type": "string" },
+            "end": { "type": "string" }
+          }
+        },
+        "stats": {
+          "type": "object",
+          "properties": {
+            "habitsCompleted": { "type": "number" },
+            "todosCompleted": { "type": "number" },
+            "totalStreaks": { "type": "number" },
+            "missedDays": { "type": "number" }
+          }
+        },
+        "aiContent": {
+          "type": "object",
+          "properties": {
+            "summary": { "type": "string" },
+            "whatWentWrong": { "type": "string" },
+            "improvementSteps": { "type": "string" },
+            "quote": { "type": "string" }
+          }
+        },
+        "progressData": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "day": { "type": "string" },
+              "value": { "type": "number" }
+            }
+          }
+        }
+      },
+      "required": ["userId", "createdAt", "dateRange", "stats", "aiContent"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profiles"
+    },
+    "/users/{userId}/habits/{habitId}": {
+      "schema": "Habit",
+      "description": "Habits created by users"
+    },
+    "/users/{userId}/completions/{completionId}": {
+      "schema": "Completion",
+      "description": "Habit completion logs"
+    },
+    "/admins/{adminId}": {
+      "schema": "Admin",
+      "description": "Whitelisted admin users"
+    },
+    "/users/{userId}/dailyQuotes/{quoteId}": {
+      "schema": "DailyQuote",
+      "description": "User daily motivational quotes"
+    },
+    "/users/{userId}/todos/{todoId}": {
+      "schema": "Todo",
+      "description": "User to-do items"
+    },
+    "/users/{userId}/reports/{reportId}": {
+      "schema": "WeeklyReport",
+      "description": "AI weekly productivity reports"
+    }
+  }
+}

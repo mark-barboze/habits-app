@@ -1,0 +1,67 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 1. Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isEmailVerified() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // 2. User Data Pattern (Subcollections)
+    match /users/{userId} {
+      // Basic profile access
+      allow read, write: if isOwner(userId);
+
+      // Sub-collections under the user
+      match /habits/{habitId} {
+        allow read, write: if isOwner(userId);
+      }
+
+      match /completions/{completionId} {
+        allow read, write: if isOwner(userId);
+      }
+
+      match /todos/{todoId} {
+        allow read, write: if isOwner(userId);
+      }
+
+      match /reports/{reportId} {
+        allow read, write: if isOwner(userId);
+      }
+
+      match /dailyQuotes/{quoteId} {
+        allow read, write: if isOwner(userId);
+      }
+    }
+
+    // 3. Admins
+    match /admins/{adminId} {
+      allow read: if isSignedIn();
+      allow write: if false;
+    }
+
+    // 4. Default deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
