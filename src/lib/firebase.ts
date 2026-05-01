@@ -16,7 +16,8 @@ const firebaseConfig = {
   appId: "1:391545166130:web:eda8b184262e2cd5209f2b"
 };
 
-console.log("🔥 FIREBASE FILE LOADED", firebaseConfig);
+console.log("🔥 API KEY CHECK:", firebaseConfig.apiKey);
+console.log("🔥 FULL CONFIG:", JSON.stringify(firebaseConfig));
 
 const app = initializeApp(firebaseConfig);
 console.log("Firebase Project ID:", firebaseConfig.projectId);
