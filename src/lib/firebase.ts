@@ -4,8 +4,8 @@
  */
 
 import { initializeApp, getApps, getApp } from 'firebase/app';
-import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from 'firebase/auth';
-import { getFirestore, doc, getDocFromServer } from 'firebase/firestore';
+import { getAuth, GoogleAuthProvider, onAuthStateChanged } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
 
 // 🔥 Firebase Config
 const firebaseConfig = {
@@ -21,35 +21,22 @@ const firebaseConfig = {
 console.log("🔥 API KEY CHECK:", firebaseConfig.apiKey);
 console.log("🔥 FULL CONFIG:", JSON.stringify(firebaseConfig));
 
-// ✅ Safe initialization (only once)
+// ✅ Initialize app safely
 const app = getApps().length === 0
   ? initializeApp(firebaseConfig)
   : getApp();
 
 console.log("Firebase Project ID:", firebaseConfig.projectId);
 
-// ✅ Services
-export const db = getFirestore(app);
+// ✅ Services (BOUND TO SAME APP)
 export const auth = getAuth(app);
+export const db = getFirestore(app);
 export const googleProvider = new GoogleAuthProvider();
 
-// 🔍 Auth state debug
+// 🔍 Debug auth state
 onAuthStateChanged(auth, (user) => {
   console.log("Auth state:", user);
 });
 
-// 🧪 Optional test
-export async function testFirestoreConnection() {
-  try {
-    console.log('Testing Firestore connection for project:', firebaseConfig.projectId);
-    await getDocFromServer(doc(db, '_health_', 'test'));
-    console.log('Firestore connected successfully');
-  } catch (error: any) {
-    console.error('Firestore connection error detail:', error);
-    if (error.code === 'permission-denied') {
-      console.log('Firestore connected, but access was denied (check rules)');
-    }
-  }
-}
-
-export { signInWithPopup };
+// ❌ DO NOT export signInWithPopup
+// ❌ DO NOT import firebase/auth functions here unnecessarily
