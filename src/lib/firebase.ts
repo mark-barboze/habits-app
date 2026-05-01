@@ -1,3 +1,5 @@
+console.log("🔥 FIREBASE INIT FILE EXECUTED FIRST");
+
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
@@ -37,6 +39,3 @@ export const googleProvider = new GoogleAuthProvider();
 onAuthStateChanged(auth, (user) => {
   console.log("Auth state:", user);
 });
-
-// ❌ DO NOT export signInWithPopup
-// ❌ DO NOT import firebase/auth functions here unnecessarily
