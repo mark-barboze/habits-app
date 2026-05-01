@@ -1,6 +1,6 @@
 import { GoogleGenAI, Type } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY as string });
+const ai = new GoogleGenAI({ apiKey: process.env.VITE_GEMINI_API_KEY as string });
 
 export const generateWeeklySummary = async (stats: any, habits: string[], todos: string[]) => {
   const prompt = `
