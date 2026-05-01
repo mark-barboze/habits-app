@@ -3,8 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-// ✅ Import ONLY types + specific helpers (no default auth creation)
-import { signOut, onAuthStateChanged, type User } from 'firebase/auth';
+import { signOut, onAuthStateChanged, signInWithPopup, type User } from 'firebase/auth';
 import { 
   doc, 
   getDoc, 
@@ -13,9 +12,7 @@ import {
   updateDoc
 } from 'firebase/firestore';
 
-// ✅ ALWAYS use centralized Firebase instance
 import { auth, db, googleProvider } from '../lib/firebase';
-import { signInWithPopup } from 'firebase/auth';
 
 import { UserProfile, OperationType } from '../types';
 import { handleFirestoreError } from './errorService';
